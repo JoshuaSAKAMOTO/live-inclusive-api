@@ -63,7 +63,7 @@ export async function sendAdminNotification(
   await sendEmail({
     apiKey,
     to: adminEmail,
-    from: "noreply@zushiliveinclusive.com",
+    from: "info@zushiliveinclusive.com",
     subject: `【お問い合わせ】${categoryLabels[data.category]} - ${data.name}様`,
     html,
   });
@@ -95,7 +95,7 @@ export async function sendAutoReply(
   await sendEmail({
     apiKey,
     to: data.email,
-    from: "noreply@zushiliveinclusive.com",
+    from: "info@zushiliveinclusive.com",
     subject: "【逗子ライブインクルーシブ】お問い合わせを受け付けました",
     html,
   });

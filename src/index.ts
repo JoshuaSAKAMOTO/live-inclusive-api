@@ -1,6 +1,7 @@
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { contactRoute } from "./routes/contact";
+import { lineWebhookRoute } from "./routes/line-webhook";
 
 type Bindings = {
   RESEND_API_KEY: string;
@@ -16,13 +17,7 @@ const app = new Hono<{ Bindings: Bindings }>();
 app.use(
   "/api/*",
   cors({
-    origin: (origin, c) => {
-      const allowed = c.env.ALLOWED_ORIGIN || "http://localhost:3000";
-      if (origin === allowed || origin === "http://localhost:3000") {
-        return origin;
-      }
-      return null;
-    },
+    origin: "*",
     allowMethods: ["POST", "OPTIONS"],
     allowHeaders: ["Content-Type"],
   })
@@ -30,6 +25,7 @@ app.use(
 
 // ルート
 app.route("/api", contactRoute);
+app.route("/api", lineWebhookRoute);
 
 // ヘルスチェック
 app.get("/", (c) => c.json({ status: "ok", service: "live-inclusive-api" }));

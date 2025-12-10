@@ -85,9 +85,11 @@ export async function sendAutoReply(
     <p>内容を確認の上、担当者より折り返しご連絡いたします。</p>
     <p>今しばらくお待ちくださいますようお願い申し上げます。</p>
     <br>
+    <p style="color: #666; font-size: 12px;">※こちらのご案内は送信専用アドレスから送信しております。ご連絡の際は下記アドレスにお願いいたします。</p>
+    <br>
     <p>━━━━━━━━━━━━━━━━━━━━</p>
     <p>逗子ライブインクルーシブ実行委員会</p>
-    <p>Email: support@zushiliveinclusive.com</p>
+    <p>Email: zushilive2025@gmail.com</p>
     <p>Tel: 050-3578-2929</p>
     <p>━━━━━━━━━━━━━━━━━━━━</p>
   `;

@@ -9,6 +9,7 @@ type Bindings = {
   LINE_GROUP_ID: string;
   CONTACT_NOTIFICATION_EMAIL: string;
   ALLOWED_ORIGIN: string;
+  TURNSTILE_SECRET_KEY: string;
 };
 
 const app = new Hono<{ Bindings: Bindings }>();

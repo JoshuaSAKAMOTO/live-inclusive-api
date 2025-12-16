@@ -8,6 +8,7 @@ export const contactSchema = z.object({
     errorMap: () => ({ message: "カテゴリを選択してください" }),
   }),
   message: z.string().min(1, "メッセージを入力してください"),
+  turnstileToken: z.string().optional(),
 });
 
 export type ContactFormData = z.infer<typeof contactSchema>;

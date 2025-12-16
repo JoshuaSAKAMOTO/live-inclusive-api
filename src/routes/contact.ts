@@ -9,7 +9,21 @@ type Bindings = {
   LINE_CHANNEL_ACCESS_TOKEN: string;
   LINE_GROUP_ID: string;
   CONTACT_NOTIFICATION_EMAIL: string;
+  TURNSTILE_SECRET_KEY: string;
 };
+
+async function verifyTurnstile(token: string, secretKey: string): Promise<boolean> {
+  const response = await fetch(
+    "https://challenges.cloudflare.com/turnstile/v0/siteverify",
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: `secret=${secretKey}&response=${token}`,
+    }
+  );
+  const result = await response.json() as { success: boolean };
+  return result.success;
+}
 
 export const contactRoute = new Hono<{ Bindings: Bindings }>();
 
@@ -29,6 +43,20 @@ contactRoute.post(
   }),
   async (c) => {
     const data = c.req.valid("json");
+
+    // Turnstile検証（トークンがあれば検証、なければスキップ - 移行期間用）
+    if (data.turnstileToken) {
+      const isValid = await verifyTurnstile(data.turnstileToken, c.env.TURNSTILE_SECRET_KEY);
+      if (!isValid) {
+        return c.json(
+          {
+            success: false,
+            message: "認証に失敗しました。ページを再読み込みしてもう一度お試しください。",
+          },
+          400
+        );
+      }
+    }
 
     try {
       // 並列で送信（どれかが失敗しても他は続行）

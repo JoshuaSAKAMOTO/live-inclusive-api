@@ -44,18 +44,26 @@ contactRoute.post(
   async (c) => {
     const data = c.req.valid("json");
 
-    // Turnstile検証（トークンがあれば検証、なければスキップ - 移行期間用）
-    if (data.turnstileToken) {
-      const isValid = await verifyTurnstile(data.turnstileToken, c.env.TURNSTILE_SECRET_KEY);
-      if (!isValid) {
-        return c.json(
-          {
-            success: false,
-            message: "認証に失敗しました。ページを再読み込みしてもう一度お試しください。",
-          },
-          400
-        );
-      }
+    // Turnstile検証（必須）
+    if (!data.turnstileToken) {
+      return c.json(
+        {
+          success: false,
+          message: "認証が必要です。ページを再読み込みしてください。",
+        },
+        400
+      );
+    }
+
+    const isValid = await verifyTurnstile(data.turnstileToken, c.env.TURNSTILE_SECRET_KEY);
+    if (!isValid) {
+      return c.json(
+        {
+          success: false,
+          message: "認証に失敗しました。ページを再読み込みしてもう一度お試しください。",
+        },
+        400
+      );
     }
 
     try {
